@@ -1,0 +1,152 @@
+<% layout('layouts/boilerplate')%>
+<div class="row">
+  <h1 class="text-center">Edit Campground</h1>
+  <div class="col-6 offset-3">
+    <form
+      action="/campgrounds/<%=campground._id%>?_method=PUT"
+      method="POST"
+      class="to-be-validated"
+      novalidate
+      enctype="multipart/form-data"
+    >
+      <div class="mb-3">
+        <label class="form-label" for="title">Title</label>
+        <input
+          class="form-control"
+          type="text"
+          id="title"
+          name="campground[title]"
+          value="<%=campground.title %>"
+          required
+        />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="location">Location</label>
+        <input
+          class="form-control"
+          type="text"
+          id="location"
+          name="campground[location]"
+          value="<%=campground.location %>"
+          required
+        />
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <!-- <div class="mb-3">
+                <label class="form-label" for="image">Image Url</label>
+                <input class="form-control" type="text" id="image" name="campground[image]"
+                    value="<%=campground.image %>" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+            </div> -->
+      <div class="mb-3">
+        <label class="form-label" for="price">Campground Price</label>
+        <div class="input-group">
+          <span class="input-group-text" id="price-label">$</span>
+          <input
+            type="text"
+            class="form-control"
+            id="price"
+            placeholder="0.00"
+            aria-label="price"
+            aria-describedby="price-label"
+            name="campground[price]"
+            value="<%=campground.price %>"
+            required
+          />
+        </div>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="formFileMultiple" class="form-label">Add more images</label>
+        <input
+          class="form-control"
+          type="file"
+          id="formFileMultiple"
+          name="image"
+          multiple
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="description">Description</label>
+        <textarea
+          class="form-control"
+          type="text"
+          id="description"
+          name="campground[description]"
+          required
+        >
+<%= campground.description%></textarea
+        >
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+
+      <h5>Delete image(s)</h5>
+      <p>NOTE: Click on images to check them for deletion</p>
+      <div
+        id="carouselExampleControls"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-inner">
+          <% campground.images.forEach(function(img, i) {%>
+          <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+            <label for="image-<%=i%>">
+              <img
+                src="<%=img.url%>"
+                class="d-block w-100"
+                alt=""
+                crossorigin
+              />
+            </label>
+            <div class="form-check-inline">
+              <input
+                type="checkbox"
+                id="image-<%=i%>"
+                name="deleteImages[]"
+                value="<%=img.filename%>"
+              />
+              Delete
+            </div>
+          </div>
+          <% }) %>
+        </div>
+        <% if(campground.images.length > 1) {%>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleControls"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleControls"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        <% } %>
+      </div>
+
+      <div class="mb-3">
+        <button class="btn btn-warning">Update Campground</button>
+      </div>
+    </form>
+    <p>
+      <button class="btn btn-dark">
+        <a class="link-light" style="text-decoration: none" href="/campgrounds"
+          >&larr; Back to all Campgrounds</a
+        >
+      </button>
+    </p>
+  </div>
+</div>

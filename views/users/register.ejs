@@ -1,0 +1,97 @@
+<% layout('layouts/boilerplate')%>
+
+<div class="container row d-flex justify-content-center align-items-center mb-5 ">
+      <div class="card shadow col-sm-4">
+        <!-- <img
+          src="https://images.unsplash.com/photo-1606816543918-4ac71b732aa2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjUwfHxjYW1waW5nfGVufDB8MHwwfHw%3D&auto=format&fit=crop&w=1267&h=50&q=60"
+          alt=""
+          class="card-img-top"
+        /> -->
+        <div class="card-body">
+          <h5 class="text-center">Sign Up</h5>
+          <form
+            action="/register"
+            method="POST"
+            class="to-be-validated"
+            novalidate
+          >
+            <div class="mb-3">
+              <label class="form-label" for="username">Username</label>
+              <input
+                class="form-control"
+                type="text"
+                id="username"
+                name="username"
+                required
+                autofocus
+              />
+              <div class="valid-feedback">Looks good!</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="firstName" class="form-label">First Name</label>
+              <input class="form-control" type="text" name="firstName" id="firstName" required>
+              <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="mb-3">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input class="form-control" type="text" name="lastName" id="lastName">
+              <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="mb-3">
+              <label for="imgUrl" class="form-label">Image URL</label>
+              <input class="form-control" type="text" name="avatar" id="imgUrl" re>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="email">Email</label>
+              <input
+                class="form-control"
+                type="email"
+                id="email"
+                name="email"
+                required
+              />
+              <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="password">Password</label>
+              <input
+                class="form-control"
+                type="password"
+                id="password"
+                name="password"
+                required
+              />
+              <div class="valid-feedback">Looks good!</div>
+            </div>
+
+            <div class="mb-3 form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="adminCheck"
+                onclick="ShowHideAdmin(this)"
+              />
+              <label class="form-check-label" for="flexSwitchCheckChecked"
+                >as Admin
+              </label>
+            </div>
+            <div id="admin-pass" class="mb-3" style="display: none">
+              <!-- <label class="form-label" for="password">Password</label> -->
+              <input
+                class="form-control"
+                type="password"
+                name="adminCode"
+                placeholder="Access Pass"
+              />
+            </div>
+
+            <button class="btn btn-success btn-block">Sign Up!</button>
+          </form>
+        </div>
+      </div>
+</div>
+
+<script src="/regAsAdmin.js"></script>

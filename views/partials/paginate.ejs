@@ -1,0 +1,29 @@
+<div class="my-2">
+    <nav aria-label="Campground Pagination">
+      <ul class="pagination pagination-sm justify-content-center">
+        <% if(currentPage - 1) { %>
+          <li class="page-item">
+            <a class="page-link" href="/campgrounds?page=<%= campgrounds.page -1 %>">
+              <span area-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        <% } %>
+        <% if(campgrounds.totalPages > 1 && campgrounds.docs.length) { %>
+          <% for(let i = startPage; i <= endPage; i++) { %>
+            <li class="page-item">
+              <a class="page-link <%= i === campgrounds.page ? 'text-bg-dark' : '' %>" href="/campgrounds?page=<%= i %>">
+                <%= i %>
+              </a>
+            </li>
+          <% } %>
+        <% } %>
+        <% if((currentPage + 1) <= totalPages) { %>
+          <li class="page-item">
+            <a class="page-link" href="/campgrounds?page=<%= campgrounds.page + 1 %>">
+              <span area-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>

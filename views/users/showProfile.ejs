@@ -1,0 +1,38 @@
+<% layout('layouts/boilerplate')%>
+
+
+<div class="row mb-4">
+	<div class="col-6 ">
+		<div class="card">
+			<h1 class="card-header"><%= user.firstName + " " + user.lastName %></h1>
+		
+			<% if(user.avatar) { %> 
+			<img src="<%= user.avatar %>" alt="user profile image">
+			<% } else { %> 
+			<img src="https://images.unsplash.com/photo-1582845512747-e42001c95638?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8dG95fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="user profile image">
+			<% } %> 
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item"><a href="mailto:<%= user.email %>"><%= user.email %></a></li>
+			  </ul>
+			
+		
+			<div class="card-body">
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quasi similique architecto ad modi sunt quaerat possimus, officiis quos. Voluptatibus repellendus exercitationem, id saepe sunt consectetur non quam sapiente assumenda.
+
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quasi similique architecto ad modi sunt quaerat possimus, officiis quos. Voluptatibus repellendus exercitationem, id saepe sunt consectetur non quam sapiente assumenda.
+			</div>
+	 	</div>
+	</div>
+	<div class="col-6">
+		<h3 class="display-6"> Collection:</h3>
+		<ul>
+			<% if(campgrounds.length < 1) {%> 
+				<p>No campground entries.</p>
+				<% } else { %> 
+					<% campgrounds.forEach(function(campground) { %>
+					<li ><a style="text-decoration:none;" href="/campgrounds/<%= campground.id %>"><%= campground.title %></a> | <%= campground.location %></li>
+				<% }) %> 
+			<% }; %>
+		</ul>
+	</div>
+</div>

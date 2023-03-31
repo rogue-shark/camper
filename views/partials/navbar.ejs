@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-center">
+  <div class="container">
+
+      <a class="navbar-brand" href="/">Camper</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
+        <div class="navbar-nav mx-auto">
+            <a class="nav-link mx-2" href="/">Home</a>
+            <a class="nav-link mx-2" href="/campgrounds">Campsites</a>
+            <a class="nav-link mx-2" href="/campgrounds/new">New Camp</a>
+        </div>
+        <div class="navbar-nav">
+            <% if(!currentUser) {%>
+            <a class="nav-link" href="/login">Login</a>
+            <a class="nav-link" href="/register">Sign Up</a>
+            <% } else { %>
+             <div >
+              <li class="nav-item dropdown">
+                <a class="navbar-brand dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fa-regular fa-circle-user"></i>
+                </a>
+                
+                <ul class="dropdown-menu text-center">
+                  <li><a class="dropdown-item" href="/users/<%= currentUser._id %>">Profile</a></li>
+                  <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                </ul>
+              </li>
+            </div>
+            <% } %>
+        </div>
+      </div>
+    </div>
+
+</nav>

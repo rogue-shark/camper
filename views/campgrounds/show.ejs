@@ -1,0 +1,267 @@
+<% layout('layouts/boilerplate')%>
+<link rel="stylesheet" src="/public/showPageMap.js" />
+
+<div class="row mb-4">
+  <div class="col-6">
+    <div class="card mb-3">
+      <!-- Carousal to show images -->
+      <div
+        id="carouselExampleControls"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-inner">
+          <% campground.images.forEach((img, i) => { %>
+          <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+            <img
+              src="<%= img.url%>"
+              class="d-block w-100"
+              alt=""
+              crossorigin=""
+            />
+          </div>
+          <% }) %>
+        </div>
+        <% if(campground.images.length > 1) {%>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleControls"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleControls"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        <% } %>
+      </div>
+
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <h5 class="card-title"><%= campground.title%></h5>
+          <!-- LIKES -->
+          <div class="card-title">
+            <form
+              action="/campgrounds/<%= campground._id %>/like"
+              method="POST"
+            >
+              <div class="btn-group">
+                <% if (currentUser && campground.likes.some(function (like) {
+                return like.equals(currentUser._id) })) { %>
+                <button
+                  class="btn btn-sm btn-danger"
+                  style="border-radius: 50%"
+                >
+                  <i class="fa-solid fa-heart"></i>
+                </button>
+                <% } else { %>
+                <button class="btn btn-sm btn-light" style="border-radius: 50%">
+                  <i class="fa-regular fa-heart"></i>
+                </button>
+                <% } %>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <button
+            type="button"
+            class="btn btn-xs btn-dark"
+            data-bs-toggle="modal"
+            data-bs-target="#campgroundLikes"
+          >
+            <span
+              ><i class="fas fa-thumbs-up"></i> <%= campground.likes.length %>
+            </span>
+          </button>
+        </div>
+
+        <p class="card-text"><%= campground.description%></p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item text-muted"><%= campground.location%></li>
+        <li class="list-group-item text-muted">
+          Submitted by: <a href="/users/<%= campground.owner.id %>"><%= campground.owner.username %></a>
+        </li>
+        <li class="list-group-item">$<%= campground.price%>/night</li>
+      </ul>
+
+      <!-- adding logic to only have access for deleting/editing a campground if the owner/owner of that particular camp is logged in -->
+      <% if( currentUser && campground.owner.equals(currentUser._id) ||
+      currentUser && currentUser.isAdmin ) {%>
+      <div class="card-body">
+        <a
+          class="card-link btn btn-info"
+          href="/campgrounds/<%=campground._id%>/edit"
+          >Edit</a
+        >
+        <form
+          class="d-inline"
+          action="/campgrounds/<%=campground._id%>?_method=DELETE"
+          method="POST"
+        >
+          <button class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+      <% } %>
+
+      <div class="card-footer text-muted">
+        <!-- using moment -->
+        <%= moment(campground.createdAt).fromNow() %>
+      </div>
+    </div>
+
+    <!-- MAP using MapBox -->
+    <div class="d-flex justify-content-center mb-2">
+      <div id="map"></div>
+    </div>
+  </div>
+  <div class="col-6">
+    <% if(currentUser) {%>
+    <h2>Leave a Review</h2>
+    <form
+      action="/campgrounds/<%=campground._id%>/reviews"
+      method="POST"
+      class="mb-3 validated-form"
+      novalidate
+    >
+      <!-- <div class="mb-3">
+                <label class="form-label" for="rating">Rating</label>
+                <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
+            </div> -->
+
+      <!-- https://github.com/LunarLogic/starability -->
+      <fieldset class="starability-basic">
+        <input
+          type="radio"
+          id="no-rate"
+          class="input-no-rate"
+          name="review[rating]"
+          value="1"
+          checked
+          aria-label="No rating."
+        />
+        <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+        <label for="first-rate1" title="Terrible">1 star</label>
+        <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+        <label for="first-rate2" title="Not good">2 stars</label>
+        <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+        <label for="first-rate3" title="Average">3 stars</label>
+        <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+        <label for="first-rate4" title="Very good">4 stars</label>
+        <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+        <label for="first-rate5" title="Amazing">5 stars</label>
+      </fieldset>
+
+      <div class="mb-3">
+        <label class="form-label" for="body">Review</label>
+        <textarea
+          class="form-control"
+          name="review[body]"
+          id="body"
+          cols="30"
+          rows="3"
+          required
+        ></textarea>
+        <div class="valid-feedback">Looks good!</div>
+      </div>
+      <button class="btn btn-success">Submit</button>
+    </form>
+
+    <% } %> <% if(campground.reviews.length > 1) {%>
+    <h3>User Reviews:</h3>
+    <% } %> <% for(let review of campground.reviews) { %>
+    <div class="card mb-3 border-light">
+      <div class="card-body bg-light">
+        <!-- Logic for adding stars 
+                <div class='stars-wrapper'>
+                    <% for( let i = 0; i < review?.rating; i++ ) { %>
+                        <div class='star-filled'>&#9733;</div>
+                    <% } %>
+                    <% for( let i = 0; i < 5 - review?.rating; i++ ) { %>
+                        <div class='star-empty'>&#9734;</div>
+                    <% } %>
+                </div>  -->
+
+        <h5 class="card-title"><%= review.owner.username%></h5>
+        <p class="starability-result" data-rating="<%=review.rating%>">
+          Rated: <%= review.rating %>
+        </p>
+
+        <!-- <h6 class="card-subtitle mb-2 text-muted">By <%= review.owner.username%></h6> -->
+        <p class="card-text">Review: <%= review.body %></p>
+        <p class="pull-right"><%= moment(review.createdAt).fromNow() %></p>
+        <% if( currentUser && review.owner.equals(currentUser._id) ||
+        currentUser && currentUser.isAdmin ) {%>
+        <form
+          action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE"
+          method="POST"
+        >
+          <button class="btn btn-sm btn-danger">Delete</button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- Campground Likes Modal -->
+<div id="campgroundLikes" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+          Campground likes: <%= campground.likes.length %>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Liked by:</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% campground.likes.forEach(function(like) { %>
+            <tr class="table-light">
+              <td>
+                <span class=""><i class="fa-regular fa-face-smile"></i></span>
+                <%= like.username %>
+              </td>
+            </tr>
+            <% }); %> <% if (campground.likes.length === 0) { %>
+            <tr class="table-light">
+              <td><em>No likes yet.</em></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- to get access to the below info in our public/showPageMap.js -->
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>'
+  const campground = <%- JSON.stringify(campground) %>
+</script>
+
+<script src="/showPageMap.js"></script>
+<script src="/regAsAdmin.js"></script>

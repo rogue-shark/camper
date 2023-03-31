@@ -1,0 +1,69 @@
+<% layout('layouts/boilerplate') %>
+
+<h1 class="display-4 d-inline">All Campgrounds</h1>
+
+<!-- Search camp  -->
+<!-- NOTE:so it'll instead for putting values in req.body object [POST] - it'll put into req.query object [GET] -->
+<form action="/campgrounds/search_result" method="GET" class="form-inline">
+  <div class="input-group mt-3">
+    <input
+      type="text"
+      name="search"
+      placeholder="Search Campground here..."
+      class="form-control rounded"
+    />
+    <button class="btn btn-dark"> <i class="fas fa-search"></i></button>
+  </div>
+</form>
+
+  <!-- for Cluster Map | MapBox -->
+  <div id="cluster-map"></div>
+  
+  <% for (let campground of campgrounds.docs) { %>
+  <div class="card mb-3 shadow">
+    <div class="row m-2 mt-3">
+      <% if(campground.images.length) { %>
+      <div class="col-md-4 mb-2">
+        <img
+          class="img-fluid"
+          src="<%=campground.images[0].url%>"
+          crossorigin
+        />
+      </div>
+      <% } else { %>
+      <div class="col-md-4 mb-2">
+        <img
+          class="img-fluid"
+          src="https://res.cloudinary.com/dsdsmxmd3/image/upload/v1673373817/YelpCamp-proto/default.jpg"
+          crossorigin
+        />
+      </div>
+      <% } %>
+      <div class="col-mg-8 mb-2">
+        <h5 class="card-title"><%= campground.title %></h5>
+        <div class="mb-2">
+          <span><i class="fa-solid fa-thumbs-up"></i> <%= campground.likes.length %> </span>
+        </div>
+        <!-- for testing: <h5 class="card-title"><%= campground.properties.popUpMarkup %> </h5> -->
+        <p class="card-text"><%= campground.description %></p>
+        <p class="text-muted"><%= campground.location %></p>
+        <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>">
+          More Info
+        </a>
+      </div>
+    </div>
+  </div>
+  <% } %>
+  <%- include('../partials/paginate')%>
+
+  
+  <script>
+    const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+    // all campgrounds
+    //since MapBox takes data from the object with features prop:
+    // const campgrounds ={features: <%- JSON.stringify(campgrounds) %>}
+    const campgrounds = { features: <%- JSON.stringify(campgrounds.docs) %>}
+  </script>
+
+  <script src="/clusterMap.js"></script>
+</form>
