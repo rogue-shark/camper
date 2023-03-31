@@ -1,8 +1,8 @@
 <% layout('layouts/boilerplate')%>
 <link rel="stylesheet" src="/public/showPageMap.js" />
 
-<div class="row mb-4">
-  <div class="col-6">
+<div class="row mb-4 flex-column flex-sm-row">
+  <div class="col-sm-6">
     <div class="card mb-3">
       <!-- Carousal to show images -->
       <div
@@ -125,7 +125,7 @@
       <div id="map"></div>
     </div>
   </div>
-  <div class="col-6">
+  <div class="col-sm-6">
     <% if(currentUser) {%>
     <h2>Leave a Review</h2>
     <form
