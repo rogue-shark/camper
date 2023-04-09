@@ -14,9 +14,7 @@ module.exports.createReview = async (req, res) => {
 
 module.exports.deleteReview = async (req, res) => {
   const { id, reviewId } = req.params;
-  //https://www.mongodb.com/docs/manual/reference/operator/update/pull/#-pull  -- removing the specific id from the reviewId array stored in a particular campground
   await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-  //   await Review.findByIdAndDelete(reviewId);
   await Review.findByIdAndRemove(reviewId);
   req.flash('success', 'Review deleted!');
   res.redirect(`/campgrounds/${id}`);

@@ -4,7 +4,6 @@
 </a>
 
 <!-- Search camp  -->
-<!-- NOTE:so it'll instead for putting values in req.body object [POST] - it'll put into req.query object [GET] -->
 <form action="/campgrounds/search_result" method="GET" class="form-inline">
   <div class="input-group my-3 ">
     <input
@@ -42,7 +41,6 @@
           <div class="mb-2">
             <span><i class="fa-solid fa-thumbs-up"></i> <%= campground.likes.length %> </span>
           </div>
-          <!-- for testing: <h5 class="card-title"><%= campground.properties.popUpMarkup %> </h5> -->
           <p class="card-text"><%= campground.description %></p>
           <p class="text-muted"><%= campground.location %></p>
           <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>">
