@@ -62,33 +62,13 @@ module.exports.logout = (req, res, next) => {
 
 //User Profile
 module.exports.userProfile = async (req, res) =>  {
-  //   User.findById(req.params.id, function (err, foundUser) {
-  //   if (err) {
-  //     req.flash('error', 'Something went wrong.');
-  //     res.redirect('/');
-  //   }
-  //   Campground.find()
-  //     .where('owner._id') //https://www.geeksforgeeks.org/collect-js-where-function/
-  //     .equals(foundUser._id)
-  //     .exec(function (err, campgrounds) {
-  //       if (err) {
-  //         req.flash('error', 'Something went wrong.');
-  //         res.redirect('/');
-  //       }
-  //       res.render('users/showUser', {
-  //         user: foundUser,
-  //         campgrounds: campgrounds,
-  //       });
-  //     });
-  // });
-
   const user = await User.findById(req.params.id)
-  // console.log(user)
+
   if(!user) {
     req.flash('error', 'Something went wrong!')
     return res.redirect('/campgrounds')
   }
   const campgrounds = await Campground.find({owner: `${user._id}`})
-  // console.log(campgrounds)
+
   res.render('users/showProfile', {user, campgrounds})
 };

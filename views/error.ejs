@@ -6,13 +6,6 @@
       <h4 class="alert-heading"><%=err.message%></h4>
     </div>
 
-    <!-- for development purposes, but we dont want user to see this in production -->
-    <!-- <div class="card-body">
-      <% if (process.env.NODE_ENV !== "production") {%>
-      <p><%= err.stack %></p>
-      <% } %>
-    </div> -->
-
     <div class="card-footer btn btn" onclick="history.back()">
       &larr; Go back
     </div>

@@ -86,19 +86,13 @@ module.exports.createCamp = async (req, res, next) => {
     })
     .send();
 
-  // if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400)
-  //Using Joi - validated even before express | Server side validation
-
-  /* res.send(req.body) --> we need to parse this data using middleware (urlencoded) 
-                           So, now we post data as (json) -> {"campground":{"title":"edds","location":"csc"}} 
-                                               Now, we can use this object by extracting its values*/
   const campground = new Campground(req.body.campground);
   campground.geometry = geoData.body.features[0].geometry;
   campground.images = req.files.map((f) => ({
     url: f.path,
     filename: f.filename,
-  })); //from MULTER -- i.e storing path and filename from "req.files" obj created by MULTER by mapping over the array to our database model instance of Campground that came back from cloudinary
-  campground.owner = req.user._id; //owner should be the one who created the campground
+  })); 
+  campground.owner = req.user._id; 
   await campground.save();
   console.log(campground);
   req.flash('success', 'Successfully made a campground!');
@@ -115,7 +109,6 @@ module.exports.showCamp = async (req, res) => {
     })
     .populate('owner')
     .populate('likes');
-  // console.log(campground)
   if (!campground) {
     req.flash('error', 'Cannot find that campground');
     return res.redirect('/campgrounds');
@@ -127,7 +120,6 @@ module.exports.showCamp = async (req, res) => {
 module.exports.likes = async (req, res) => {
   Campground.findById(req.params.id, function (err, foundCampground) {
     if (err) {
-      // console.log(err);
       return res.redirect('/campgrounds');
     }
 
@@ -171,7 +163,7 @@ module.exports.updateCamp = async (req, res) => {
     ...req.body.campground,
   });
   const imgs = req.files.map((f) => ({ url: f.path, filename: f.filename }));
-  camp.images.push(...imgs); //pushing url and filename to our images array (by spreading) in campground
+  camp.images.push(...imgs);
   await camp.save();
 
   //deleting images from back end server & cloudinary
@@ -186,7 +178,6 @@ module.exports.updateCamp = async (req, res) => {
     await camp.updateOne({
       $pull: { images: { filename: { $in: req.body.deleteImages } } },
     });
-    // console.log(camp)
   }
 
   req.flash('success', 'Successfully updated campground!');
